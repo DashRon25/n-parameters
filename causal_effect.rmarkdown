@@ -37,4 +37,7 @@ x = "Civic Engagement", y = "Voted in 2006 Primary Election",
 caption = "Random sample of 5% of the data from Gerber, Green, and Larimer(2008)")
 ```
 
+
+
 Using a dataset that studied voter pressure and turnout in 2006 in Michigan, we are attempting to determine the effectiveness of sending a postcard shaming non-voters in getting people to vote. One potential issue is that the states might have much too different populations to properly justify the predictions.
+
