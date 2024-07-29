@@ -35,6 +35,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="causal_effect_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="causal_effect_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -78,7 +107,64 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>Using a dataset that studied voter pressure and turnout in 2006 in Michigan, we are attempting to determine the effectiveness of sending a postcard shaming non-voters in getting people to vote.</p>
+<p>Using a dataset that studied voter pressure and turnout in 2006 in Michigan, we are attempting to determine the effectiveness of sending a postcard shaming non-voters in getting people to vote. One potential issue is that the states might have much too different populations to properly justify the predictions.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: voted ~ age_z + sex + treatment + voter_class + treatment * voter_class 
+   Data: ch10_data (Number of observations: 34408) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+                                            Estimate Est.Error l-95% CI
+Intercept                                       0.16      0.01     0.14
+age_z                                           0.04      0.00     0.03
+sexMale                                         0.00      0.00    -0.01
+treatmentCivicDuty                              0.02      0.02    -0.03
+treatmentHawthorne                              0.00      0.02    -0.04
+treatmentSelf                                  -0.01      0.02    -0.05
+treatmentNeighbors                              0.08      0.02     0.04
+voter_classSometimesVote                        0.11      0.01     0.09
+voter_classAlwaysVote                           0.30      0.01     0.27
+treatmentCivicDuty:voter_classSometimesVote    -0.00      0.02    -0.05
+treatmentHawthorne:voter_classSometimesVote     0.01      0.02    -0.03
+treatmentSelf:voter_classSometimesVote          0.06      0.02     0.01
+treatmentNeighbors:voter_classSometimesVote    -0.01      0.02    -0.06
+treatmentCivicDuty:voter_classAlwaysVote       -0.01      0.03    -0.06
+treatmentHawthorne:voter_classAlwaysVote        0.03      0.03    -0.02
+treatmentSelf:voter_classAlwaysVote             0.05      0.03    -0.01
+treatmentNeighbors:voter_classAlwaysVote       -0.00      0.03    -0.06
+                                            u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept                                       0.17 1.00     2550     3102
+age_z                                           0.04 1.00     6332     3087
+sexMale                                         0.01 1.00     6525     2852
+treatmentCivicDuty                              0.06 1.00     2432     2720
+treatmentHawthorne                              0.04 1.00     2712     2885
+treatmentSelf                                   0.03 1.00     2463     2490
+treatmentNeighbors                              0.13 1.00     1912     1927
+voter_classSometimesVote                        0.13 1.00     2389     2892
+voter_classAlwaysVote                           0.32 1.00     2495     2880
+treatmentCivicDuty:voter_classSometimesVote     0.04 1.00     2497     2802
+treatmentHawthorne:voter_classSometimesVote     0.05 1.00     2825     3038
+treatmentSelf:voter_classSometimesVote          0.11 1.00     2514     2656
+treatmentNeighbors:voter_classSometimesVote     0.04 1.00     2016     2314
+treatmentCivicDuty:voter_classAlwaysVote        0.04 1.00     2624     2829
+treatmentHawthorne:voter_classAlwaysVote        0.09 1.00     2898     3056
+treatmentSelf:voter_classAlwaysVote             0.10 1.00     2631     2897
+treatmentNeighbors:voter_classAlwaysVote        0.05 1.00     2154     2239
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.45      0.00     0.45     0.45 1.00     6807     2860
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p><span class="math display">\[y_{i} = \beta_{0} + \beta_{1} age\_z + \beta_{2}male_i + \beta_{3}civic\_duty_i + \\ \beta_{4}hawthorne_i + \beta_{5}self_i + \beta_{6}neighbors_i + \\ \beta_{7}Sometimes\ vote_i + \beta_{8}Always\ vote_i + \\ \beta_{9}civic\_duty_i Sometimes\ vote_i + \beta_{10}hawthorne_i Sometimes\ vote_i + \\ \beta_{11}self_i Sometimes\ vote_i + \beta_{11}neighbors_i Sometimes\ vote_i + \\ \beta_{12}civic\_duty_i Always\ vote_i + \beta_{13}hawthorne_i Always\ vote_i + \\ \beta_{14}self_i Always\ vote_i + \beta_{15}neighbors_i Always\ vote_i + \epsilon_{i}\]</span></p>
 
 </main>
 <!-- /main column -->

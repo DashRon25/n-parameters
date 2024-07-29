@@ -11,6 +11,9 @@ execute:
 #| message: false
 library(tidyverse)
 library(primer.data)
+library(brms)
+library(tidybayes)
+library(gtsummary)
 ```
 
 ```{r}
@@ -39,5 +42,27 @@ caption = "Random sample of 5% of the data from Gerber, Green, and Larimer(2008)
 
 
 
-Using a dataset that studied voter pressure and turnout in 2006 in Michigan, we are attempting to determine the effectiveness of sending a postcard shaming non-voters in getting people to vote. One potential issue is that the states might have much too different populations to properly justify the predictions.
+Using a dataset that studied voter pressure and turnout in 2006 in Michigan, we are attempting to determine the effectiveness of sending a postcard shaming non-voters in getting people to vote. One potential issue is that the states might have much too different populations to properly justify the predictions. We made a logistic model that uses the dependent variable "primary_06" to determine whether a voter voted or not based on receiving a postcard. People that previously voted tend to vote again.
+
+
+
+```{r}
+#| cache: true
+#| label: model
+brm(formula = voted ~ age_z + sex + treatment + voter_class + treatment*voter_class, 
+data = ch10_data, 
+family = gaussian(), 
+refresh = 0, silent = 2, seed = 19)
+```
+
+
+
+$$y_{i} = \beta_{0} + \beta_{1} age\_z + \beta_{2}male_i + \beta_{3}civic\_duty_i + \\ \beta_{4}hawthorne_i + \beta_{5}self_i + \beta_{6}neighbors_i + \\ \beta_{7}Sometimes\ vote_i + \beta_{8}Always\ vote_i + \\ \beta_{9}civic\_duty_i Sometimes\ vote_i + \beta_{10}hawthorne_i Sometimes\ vote_i + \\ \beta_{11}self_i Sometimes\ vote_i + \beta_{11}neighbors_i Sometimes\ vote_i + \\ \beta_{12}civic\_duty_i Always\ vote_i + \beta_{13}hawthorne_i Always\ vote_i + \\ \beta_{14}self_i Always\ vote_i + \beta_{15}neighbors_i Always\ vote_i + \epsilon_{i}$$
+
+
+```{r}
+fit_postcard_vote |> 
+tbl_regression(intercept = TRUE, 
+  estimate_fun = function(x) style_sigfig(x, digits = 3))
+```
 
